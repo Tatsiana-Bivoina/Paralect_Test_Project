@@ -9,7 +9,7 @@ import {
   Transition,
   Text,
   rem,
-  Title,
+  Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
@@ -85,26 +85,23 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  logoTitle: {
-    fontFamily: 'Poppins',
-    fontWeight: 600,
-    fontSize: '24px',
-    lineHeight: '36px',
-    letterSpacing: '-0.02em',
-    margin: 0,
-  },
-
   logoContainer: {
     display: 'flex',
     alignItems: 'center',
+
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
 }));
 
-interface HeaderResponsiveProps {
+interface HeaderProps {
   links: { link: string; label: string }[];
+  logoHandleClick: () => void;
 }
 
-export default function HeaderComponent({ links }: HeaderResponsiveProps) {
+export default function HeaderComponent(props: HeaderProps) {
+  const { links, logoHandleClick } = props;
   const [opened, { toggle, close }] = useDisclosure(false);
   const { classes, cx } = useStyles();
 
@@ -121,14 +118,43 @@ export default function HeaderComponent({ links }: HeaderResponsiveProps) {
     </Text>
   ));
 
+  const renderLogoContainer = () => (
+    <Group className={classes.logoContainer}>
+      <Button
+        leftIcon={<Logo />}
+        variant="subtle"
+        onClick={() => logoHandleClick()}
+        styles={() => ({
+          root: {
+            border: 0,
+            padding: 0,
+            fontFamily: 'Poppins',
+            fontWeight: 600,
+            fontSize: '24px',
+            lineHeight: '36px',
+            letterSpacing: '-0.02em',
+            color: '#232134',
+            margin: 0,
+
+            '&:hover': {
+              backgroundColor: 'transparent',
+            },
+          },
+          icon: {
+            marginRight: '12px !important',
+          },
+        })}
+      >
+        Jobored
+      </Button>
+    </Group>
+  );
+
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
-        <Group spacing={12} className={classes.logoContainer}>
-          <Logo />
-          <Title className={classes.logoTitle}>Jobored</Title>
-        </Group>
-        <Group spacing={60} className={classes.links}>
+        {renderLogoContainer()}
+        <Group spacing="3.85rem" className={classes.links}>
           {items}
         </Group>
 

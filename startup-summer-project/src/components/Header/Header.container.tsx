@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import HeaderComponent from './Header.component';
 
 const links = [
@@ -7,8 +8,14 @@ const links = [
 ];
 
 function HeaderContainer() {
+  const navigate = useNavigate();
+
+  const logoHandleClick = () => {
+    navigate('/');
+  };
+
   return (
-    <HeaderComponent links={links} />
+    <HeaderComponent links={links} logoHandleClick={logoHandleClick} />
   );
 }
 
