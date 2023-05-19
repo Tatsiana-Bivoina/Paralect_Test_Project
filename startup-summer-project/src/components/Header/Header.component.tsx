@@ -47,6 +47,10 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     height: '100%',
 
+    [theme.fn.smallerThan('lg')]: {
+      padding: '10px 15px',
+    },
+
     [theme.fn.smallerThan('sm')]: {
       justifyContent: 'space-between',
       gap: 0,
