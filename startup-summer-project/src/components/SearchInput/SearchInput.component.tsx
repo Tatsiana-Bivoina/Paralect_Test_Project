@@ -22,11 +22,13 @@ export default function SearchInputComponent(props: Props) {
 
   return (
     <TextInput
+      data-elem="search-input" 
       icon={<IconSearch />}
       value={searchInputValue}
       onChange={(ev) => searchHandleChange(ev.target.value)}
       rightSection={(
         <Button
+          data-elem="search-button"
           onClick={() => getVacansiesButtonHandleClick()}
           styles={() => ({
             root: {

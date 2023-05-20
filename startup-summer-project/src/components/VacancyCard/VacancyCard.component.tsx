@@ -83,6 +83,7 @@ export default function VacancyCardComponent(props: Props) {
 
   const renderButtonStar = () => (
     <Button
+      data-elem={`vacancy-${vacancy.id}-shortlist-button`}
       rightIcon={vacancy.isFavorite ? <PaintedStarIcon /> : <StarIcon />}
       variant="subtle"
       onClick={() => toggleFavoriteVacancy()}
@@ -111,7 +112,11 @@ export default function VacancyCardComponent(props: Props) {
   );
 
   return (
-    <Flex direction="column" className={classes.root}>
+    <Flex
+      direction="column"
+      className={classes.root}
+      data-elem={`vacancy-${vacancy.id}`}
+    >
       <Title order={2} className={classes.profession}>{vacancy.profession}</Title>
       <Flex gap={12} align="center">
         <Text className={classes.salary}>

@@ -18,7 +18,6 @@ export default function VacanciesContainerComponent(props: Props) {
     vacancies.map(
       (vacancy: VacancyResponse) => (
         <VacancyCard
-          data-elem={`vacancy-${vacancy.id}`}
           vacancy={vacancy}
           key={vacancy.id}
           vacancies={vacancies}
