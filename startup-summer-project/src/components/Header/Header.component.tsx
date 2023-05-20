@@ -158,7 +158,7 @@ export default function HeaderComponent(props: HeaderProps) {
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
         {renderLogoContainer()}
-        <Group spacing="3.85rem" className={classes.links}>
+        <Group spacing={rem(60)} className={classes.links}>
           {items}
         </Group>
 

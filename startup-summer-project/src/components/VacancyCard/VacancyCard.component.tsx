@@ -23,9 +23,9 @@ const useStyles = createStyles((theme) => ({
   root: {
     position: 'relative',
     padding: '24px 60px 24px 24px',
-    gap: '12.5px',
+    gap: rem(12.5),
     width: '100%',
-    height: '137px',
+    height: rem(137),
     background: '#FFFFFF',
     border: '1px solid #EAEBED',
     borderRadius: '12px',
@@ -94,7 +94,7 @@ export default function VacancyCardComponent(props: Props) {
           height: rem(22),
           position: 'absolute',
           top: '23px',
-          right: '29px',
+          right: '24px',
 
           '&:hover': {
             backgroundColor: 'transparent',
@@ -126,7 +126,7 @@ export default function VacancyCardComponent(props: Props) {
           {vacancy.type_of_work_title}
         </Text>
       </Flex>
-      <Flex gap={8}>
+      <Flex gap={11}>
         <LocationIcon />
         <Text className={classes.location}>
           {vacancy.town_title}
