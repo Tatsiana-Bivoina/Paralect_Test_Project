@@ -2,23 +2,17 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import EmptyStateComponent from './EmptyState.component';
 
-interface Props {
-  setIsResetFilters: React.Dispatch<React.SetStateAction<boolean>>;
-  handleResetButtonClick: () => void;
-}
-
-function EmptyStateContainer(props: Props) {
-  const { handleResetButtonClick, setIsResetFilters } = props;
+function EmptyStateContainer() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleRedirectButtonClick = () => {
-    if (location.pathname === '/') {
-      handleResetButtonClick();
-      setIsResetFilters(true);
-    } else {
-      navigate('/');
+    if (location.state === '/') {
+      localStorage.setItem('industry', '');
+      localStorage.setItem('paymentFrom', '');
+      localStorage.setItem('paymentTo', '');
     }
+    navigate('/');
   };
 
   return (

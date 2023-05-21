@@ -22,7 +22,7 @@ export default function SearchInputComponent(props: Props) {
 
   return (
     <TextInput
-      data-elem="search-input" 
+      data-elem="search-input"
       icon={<IconSearch />}
       value={searchInputValue}
       onChange={(ev) => searchHandleChange(ev.target.value)}

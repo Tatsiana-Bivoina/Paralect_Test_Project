@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useDisclosure } from '@mantine/hooks';
 import HomePageComponent from './HomePage.component';
 import { auth, getCatalogues, getVacancies } from '../../service/homePageService';
@@ -14,8 +14,9 @@ function HomePageContainer() {
   const [paymentTo, setPaymentTo] = useState<number | ''>(Number(localStorage.getItem('paymentTo')) ?? '');
   const [searchInputValue, setSearchInputValue] = useState<string>(localStorage.getItem('search') ?? '');
   const [isRequestFullfiled, setIsRequestFullfiled] = useState<boolean>(false);
-  const [isResetFilters, setIsResetFilters] = useState<boolean>(false);
   const [visible, { open, close }] = useDisclosure(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const changeFavoriteVacancies = (vacanciesArr: VacancyResponse[]): VacancyResponse[] => {
     const vacanciesCopy = [...vacanciesArr];
@@ -36,6 +37,9 @@ function HomePageContainer() {
 
   const changeVacansiesState = (arr: VacancyResponse[]) => {
     const vacanciesArr = [...arr];
+    if (vacanciesArr.length === 0) {
+      navigate('/empty-state', { state: location.pathname });
+    }
     const res = changeFavoriteVacancies(vacanciesArr);
     setVacancies(res);
   };
@@ -107,22 +111,6 @@ function HomePageContainer() {
     localStorage.setItem('paymentTo', '');
   };
 
-  useEffect(() => {
-    if (isResetFilters) {
-      handleResetButtonClick();
-      getAllVacancies()
-        .then(() => {
-          setIsRequestFullfiled(true);
-          close();
-        })
-        .catch((error) => {
-          if (error instanceof Error) {
-            console.log(error.message);
-          }
-        });
-    }
-  }, [isResetFilters]);
-
   const toggleFavoriteVacancyInVacancies = (newVacanciesArr: VacancyResponse[]) => {
     setVacancies(newVacanciesArr);
   };
@@ -167,7 +155,6 @@ function HomePageContainer() {
       searchInputValue={searchInputValue}
       visible={visible}
       isRequestFullfiled={isRequestFullfiled}
-      setIsResetFilters={setIsResetFilters}
       toggleFavoriteVacancyInVacancies={toggleFavoriteVacancyInVacancies}
       handleIndustrySelectChange={handleIndustrySelectChange}
       handlePaymentFromChange={handlePaymentFromChange}

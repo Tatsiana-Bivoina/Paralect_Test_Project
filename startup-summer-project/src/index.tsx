@@ -6,6 +6,7 @@ import Layout from './components/Layout/Layout.component';
 import HomePage from './routes/home/HomePage.container';
 import VacancyPage from './routes/vacancy/VacancyPage.container';
 import FavoriteVacanciesPage from './routes/favorite-vacancies/FavoriteVacanciesPage.container';
+import EmptyStatePage from './routes/EmptyState/EmptyState.container';
 import './styles/index.scss';
 
 const root = ReactDOM.createRoot(
@@ -21,6 +22,7 @@ root.render(
             <Route index element={<HomePage />} />
             <Route path="favorite-vacancies" element={<FavoriteVacanciesPage />} />
             <Route path="vacancy/:id" element={<VacancyPage />} />
+            <Route path="empty-state" element={<EmptyStatePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

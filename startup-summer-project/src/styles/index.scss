@@ -1,5 +1,3 @@
-@import './variables.scss';
-
 #root {
   position: relative;
 }
@@ -15,5 +13,5 @@ body {
 
 main {
   min-height: calc(100vh - 84px);
-  background-color: $background-color-light-gray;
+  background-color: #F7F7F8;
 }

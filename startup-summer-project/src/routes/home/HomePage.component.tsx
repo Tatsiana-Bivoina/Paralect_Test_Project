@@ -8,7 +8,6 @@ import {
 import Filters from '../../components/Filters/Filters.container';
 import SearchInput from '../../components/SearchInput/SearchInput.container';
 import VacanciesContainer from '../../components/VacanciesContainer/VacanciesContainer.container';
-import EmptyState from '../../components/EmptyState/EmptyState.container';
 import { Catalogue, VacancyResponse } from '../../types/apiTypes';
 
 interface Props {
@@ -20,7 +19,6 @@ interface Props {
   searchInputValue: string;
   visible: boolean;
   isRequestFullfiled: boolean;
-  setIsResetFilters: React.Dispatch<React.SetStateAction<boolean>>
   toggleFavoriteVacancyInVacancies: (arr: VacancyResponse[]) => void;
   handleIndustrySelectChange: (val: string | null) => void;
   handlePaymentFromChange: (val: number | '') => void;
@@ -74,7 +72,6 @@ export default function HomePageComponent(props: Props) {
     searchInputValue,
     visible,
     isRequestFullfiled,
-    setIsResetFilters,
     toggleFavoriteVacancyInVacancies,
     handleIndustrySelectChange,
     handlePaymentFromChange,
@@ -128,14 +125,7 @@ export default function HomePageComponent(props: Props) {
     />
   );
 
-  const renderEmptyContainer = () => (
-    <EmptyState
-      setIsResetFilters={setIsResetFilters}
-      handleResetButtonClick={handleResetButtonClick}
-    />
-  );
-
-  const renderVacansiesContainer = () => (
+  const renderVacancies = () => (
     <Container size="1116px" px={0} pt={40}>
       <Flex gap={28} className={classes.root}>
         {renderFilters()}
@@ -150,8 +140,7 @@ export default function HomePageComponent(props: Props) {
   return (
     <section className={classes.mainSection}>
       {renderLoader()}
-      {isRequestFullfiled && vacancies.length === 0 && renderEmptyContainer()}
-      {isRequestFullfiled && vacancies.length !== 0 && renderVacansiesContainer()}
+      {isRequestFullfiled && vacancies.length !== 0 && renderVacancies()}
     </section>
   );
 }
