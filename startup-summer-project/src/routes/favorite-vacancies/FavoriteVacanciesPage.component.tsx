@@ -7,8 +7,8 @@ import {
 import ReactPaginate from 'react-paginate';
 import { VacancyResponse } from '../../types/apiTypes';
 import VacanciesContainer from '../../components/VacanciesContainer/VacanciesContainer.container';
-import '../../styles/react-paginate.scss';
 import { CONTAINER_PADDING, HEADER_HEIGHT } from '../../app.config';
+import '../../styles/react-paginate.scss';
 
 interface Props {
   favoriteVacancies: VacancyResponse[];

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import FilterComponent from './Filters.component';
-import { getCatalogues } from '../../service/homePageService';
 import { Catalogue } from '../../types/apiTypes';
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
   handlePaymentFromChange: (val: number | '') => void;
   handlePaymentToChange: (val: number | '') => void;
   handleResetButtonClick: () => void;
-  getVacansiesButtonHandleClick: () => void;
+  getVacansiesButtonHandleClick: (page: number) => void;
 }
 
 function FiltersContainer(props: Props) {

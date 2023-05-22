@@ -4,7 +4,6 @@ import {
   Title,
   Text,
   createStyles,
-  ActionIcon,
   Button,
   rem,
 } from '@mantine/core';
@@ -25,7 +24,8 @@ const useStyles = createStyles((theme) => ({
     padding: '24px 60px 24px 24px',
     gap: rem(12.5),
     width: '100%',
-    height: rem(137),
+    minHeight: rem(137),
+    height: 'auto',
     background: '#FFFFFF',
     border: '1px solid #EAEBED',
     borderRadius: '12px',
@@ -48,12 +48,25 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  salaryContainer: {
+    [theme.fn.smallerThan('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    },
+  },
+
   salary: {
     fontFamily: 'Inter',
     fontWeight: 600,
     fontSize: '16px',
     lineHeight: '20px',
     color: '#232134',
+  },
+
+  dotIcon: {
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
+    },
   },
 
   typeOfWork: {
@@ -111,6 +124,47 @@ export default function VacancyCardComponent(props: Props) {
     />
   );
 
+  const renderSalary = () => (
+    <>
+      {(vacancy.payment_from !== 0 && vacancy.payment_to === 0) && (
+        <Text className={classes.salary}>
+          з/п от
+          &nbsp;
+          {vacancy.payment_from}
+          &nbsp;
+          {vacancy.currency}
+        </Text>
+      )}
+      {(vacancy.payment_from === 0 && vacancy.payment_to !== 0) && (
+        <Text className={classes.salary}>
+          з/п до
+          &nbsp;
+          {vacancy.payment_to}
+          &nbsp;
+          {vacancy.currency}
+        </Text>
+      )}
+      {(vacancy.payment_from !== 0 && vacancy.payment_to !== 0) && (
+        <Text className={classes.salary}>
+          з/п от
+          &nbsp;
+          {vacancy.payment_from}
+          &nbsp;
+          до
+          &nbsp;
+          {vacancy.payment_to}
+          &nbsp;
+          {vacancy.currency}
+        </Text>
+      )}
+      {(vacancy.payment_from === 0 && vacancy.payment_to === 0) && (
+        <Text className={classes.salary}>
+          з/п по договоренности
+        </Text>
+      )}
+    </>
+  );
+
   return (
     <Flex
       direction="column"
@@ -118,15 +172,13 @@ export default function VacancyCardComponent(props: Props) {
       data-elem={`vacancy-${vacancy.id}`}
     >
       <Title order={2} className={classes.profession}>{vacancy.profession}</Title>
-      <Flex gap={12} align="center">
-        <Text className={classes.salary}>
-          з/п от
-          &nbsp;
-          {vacancy.payment_to}
-          &nbsp;
-          {vacancy.currency}
-        </Text>
-        <DotIcon />
+      <Flex
+        gap={12}
+        align="center"
+        className={classes.salaryContainer}
+      >
+        {renderSalary()}
+        <DotIcon className={classes.dotIcon} />
         <Text className={classes.typeOfWork}>
           {vacancy.type_of_work_title}
         </Text>

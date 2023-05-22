@@ -10,7 +10,7 @@ import { ReactComponent as IconSearch } from '../../assets/search-icon.svg';
 interface Props {
   searchInputValue: string;
   searchHandleChange: (value: string) => void;
-  getVacansiesButtonHandleClick: () => void;
+  getVacansiesButtonHandleClick: (page: number) => void;
 }
 
 export default function SearchInputComponent(props: Props) {
@@ -29,7 +29,7 @@ export default function SearchInputComponent(props: Props) {
       rightSection={(
         <Button
           data-elem="search-button"
-          onClick={() => getVacansiesButtonHandleClick()}
+          onClick={() => getVacansiesButtonHandleClick(0)}
           styles={() => ({
             root: {
               display: 'flex',

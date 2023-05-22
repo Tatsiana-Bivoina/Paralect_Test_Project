@@ -4,10 +4,12 @@ import {
   Catalogue,
   CatalogueResponse,
   LoginResponse,
+  VacanciesRequest,
   VacanciesResponse,
   VacanciesResponseType,
   VacancyResponse,
 } from '../types/apiTypes';
+import { ITEMS_PER_PAGE, PUBLISHED } from '../app.config';
 
 const baseUrl: string | undefined = process.env.REACT_APP_BASE_URL;
 const secretKey: string | undefined = process.env.REACT_APP_CLIENT_SECRET_KEY;
@@ -33,11 +35,19 @@ export async function auth(): Promise<LoginResponse> {
   return response.data;
 }
 
-export async function getVacancies(): Promise<VacancyResponse[]> {
+export async function getVacancies(request: VacanciesRequest): Promise<VacancyResponse[]> {
   if (!(baseUrl && secretKey && xSecretKey)) {
     throw new Error('Извините, что-то пошло не так...');
   }
-  const response = await axios.get<VacanciesResponse>(`${baseUrl}/2.0/vacancies/?published=1&count=4&page=0`, {
+
+  const response = await axios.get<VacanciesResponse>(`${baseUrl}/2.0/vacancies/?
+  published=${PUBLISHED}&
+  count=${ITEMS_PER_PAGE}&
+  page=${request.currentPage}&
+  keyword=${request.keyword}&
+  payment_from=${request.payment_from}&
+  payment_to=${request.payment_to}&
+  catalogues=${request.catalogues}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
       'Content-Type': 'application/json',

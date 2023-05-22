@@ -4,7 +4,7 @@ import SearchInputComponent from './SearchInput.component';
 interface Props {
   searchInputValue: string;
   searchHandleChange: (value: string) => void;
-  getVacansiesButtonHandleClick: () => void;
+  getVacansiesButtonHandleClick: (page: number) => void;
 }
 
 function SearchInputContainer(props: Props) {

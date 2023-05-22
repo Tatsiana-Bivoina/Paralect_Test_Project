@@ -92,7 +92,7 @@ interface Props {
   handlePaymentToChange: (val: number | '') => void;
   handleIndustrySelectChange: (val: string | null) => void;
   handleResetButtonClick: () => void;
-  getVacansiesButtonHandleClick: () => void;
+  getVacansiesButtonHandleClick: (page: number) => void;
 }
 
 export default function FiltersComponent(props: Props) {
@@ -309,7 +309,7 @@ export default function FiltersComponent(props: Props) {
     <Button
       data-elem="search-button"
       variant="filled"
-      onClick={() => getVacansiesButtonHandleClick()}
+      onClick={() => getVacansiesButtonHandleClick(0)}
       styles={(theme) => ({
         root: {
           border: 0,

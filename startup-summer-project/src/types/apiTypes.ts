@@ -130,3 +130,11 @@ export interface Catalogue {
   label: string;
   key: number;
 }
+
+export interface VacanciesRequest {
+  currentPage: number;
+  keyword: string;
+  payment_from: number | '';
+  payment_to: number | '';
+  catalogues: number;
+}

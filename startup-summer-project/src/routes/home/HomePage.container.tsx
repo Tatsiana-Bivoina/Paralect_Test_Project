@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDisclosure } from '@mantine/hooks';
 import HomePageComponent from './HomePage.component';
 import { auth, getCatalogues, getVacancies } from '../../service/homePageService';
-import { Catalogue, VacancyResponse } from '../../types/apiTypes';
+import { Catalogue, VacanciesRequest, VacancyResponse } from '../../types/apiTypes';
+import { ITEMS_PER_PAGE } from '../../app.config';
 
 function HomePageContainer() {
   const [vacancies, setVacancies] = useState<VacancyResponse[]>([]);
@@ -14,6 +15,8 @@ function HomePageContainer() {
   const [paymentTo, setPaymentTo] = useState<number | ''>(Number(localStorage.getItem('paymentTo')) ?? '');
   const [searchInputValue, setSearchInputValue] = useState<string>(localStorage.getItem('search') ?? '');
   const [isRequestFullfiled, setIsRequestFullfiled] = useState<boolean>(false);
+  const [pagesCount, setPagesCount] = useState<number>(Number(localStorage.getItem('totalVacanciesCount')) ?? 0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [visible, { open, close }] = useDisclosure(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,8 +47,48 @@ function HomePageContainer() {
     setVacancies(res);
   };
 
-  const getAllVacancies = async () => {
-    changeVacansiesState(await getVacancies());
+  const getAllVacancies = async (request: VacanciesRequest) => {
+    changeVacansiesState(await getVacancies(request));
+  };
+
+  const getCataloguesArr = (): number => {
+    const value = localStorage.getItem('industry') ?? selectValue;
+    const catalogue = catalogues.filter((el) => el.value === value);
+    let key = 33;
+    if (catalogue.length !== 0) {
+      key = catalogue[0].key;
+    }
+    return key;
+  };
+
+  const changeTotalPagesCount = () => {
+    const count = localStorage.getItem('totalVacanciesCount');
+    if (count) {
+      const pages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
+      setPagesCount(pages <= 125 ? pages : 125);
+    }
+  };
+
+  const getVacanciesHandle = (page: number) => {
+    const defaultRequest: VacanciesRequest = {
+      catalogues: getCataloguesArr(),
+      currentPage: page,
+      keyword: searchInputValue,
+      payment_from: paymentFrom,
+      payment_to: paymentTo,
+    };
+    open();
+    getAllVacancies(defaultRequest)
+      .then(() => {
+        changeTotalPagesCount();
+        setIsRequestFullfiled(true);
+        close();
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
+      });
   };
 
   useEffect(() => {
@@ -89,16 +132,7 @@ function HomePageContainer() {
 
   useEffect(() => {
     if (accessToken !== '') {
-      getAllVacancies()
-        .then(() => {
-          setIsRequestFullfiled(true);
-          close();
-        })
-        .catch((error) => {
-          if (error instanceof Error) {
-            console.log(error.message);
-          }
-        });
+      getVacanciesHandle(0);
     }
   }, [accessToken]);
 
@@ -141,8 +175,14 @@ function HomePageContainer() {
     setSearchInputValue(value);
   };
 
-  const getVacansiesButtonHandleClick = () => {
-    console.log(searchInputValue, selectValue, paymentFrom, paymentTo);
+  const handleButtonClick = (page: number) => {
+    getVacanciesHandle(page);
+    setCurrentPage(page);
+  };
+
+  const handlePageClick = (selectedItem: { selected: number }) => {
+    getVacanciesHandle(selectedItem.selected);
+    setCurrentPage(selectedItem.selected);
   };
 
   return (
@@ -155,13 +195,16 @@ function HomePageContainer() {
       searchInputValue={searchInputValue}
       visible={visible}
       isRequestFullfiled={isRequestFullfiled}
+      pagesCount={pagesCount}
+      currentPage={currentPage}
       toggleFavoriteVacancyInVacancies={toggleFavoriteVacancyInVacancies}
       handleIndustrySelectChange={handleIndustrySelectChange}
       handlePaymentFromChange={handlePaymentFromChange}
       handlePaymentToChange={handlePaymentToChange}
       handleResetButtonClick={handleResetButtonClick}
       searchHandleChange={searchHandleChange}
-      getVacansiesButtonHandleClick={getVacansiesButtonHandleClick}
+      getVacansiesButtonHandleClick={handleButtonClick}
+      handlePageClick={handlePageClick}
     />
   );
 }

@@ -5,10 +5,12 @@ import {
   LoadingOverlay,
   createStyles,
 } from '@mantine/core';
+import ReactPaginate from 'react-paginate';
 import Filters from '../../components/Filters/Filters.container';
 import SearchInput from '../../components/SearchInput/SearchInput.container';
 import VacanciesContainer from '../../components/VacanciesContainer/VacanciesContainer.container';
 import { Catalogue, VacancyResponse } from '../../types/apiTypes';
+import '../../styles/react-paginate.scss';
 
 interface Props {
   vacancies: VacancyResponse[];
@@ -19,13 +21,18 @@ interface Props {
   searchInputValue: string;
   visible: boolean;
   isRequestFullfiled: boolean;
+  pagesCount: number;
+  currentPage: number;
   toggleFavoriteVacancyInVacancies: (arr: VacancyResponse[]) => void;
   handleIndustrySelectChange: (val: string | null) => void;
   handlePaymentFromChange: (val: number | '') => void;
   handlePaymentToChange: (val: number | '') => void;
   handleResetButtonClick: () => void;
   searchHandleChange: (value: string) => void;
-  getVacansiesButtonHandleClick: () => void;
+  getVacansiesButtonHandleClick: (page: number) => void;
+  handlePageClick: (selectedItem: {
+    selected: number;
+  }) => void;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -72,6 +79,8 @@ export default function HomePageComponent(props: Props) {
     searchInputValue,
     visible,
     isRequestFullfiled,
+    pagesCount,
+    currentPage,
     toggleFavoriteVacancyInVacancies,
     handleIndustrySelectChange,
     handlePaymentFromChange,
@@ -79,6 +88,7 @@ export default function HomePageComponent(props: Props) {
     handleResetButtonClick,
     searchHandleChange,
     getVacansiesButtonHandleClick,
+    handlePageClick,
   } = props;
   const { classes } = useStyles();
 
@@ -125,13 +135,45 @@ export default function HomePageComponent(props: Props) {
     />
   );
 
+  const renderPagination = () => (
+    <Flex justify="center" pt={23}>
+      <ReactPaginate
+        breakLabel={null}
+        nextLabel=">"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={3}
+        forcePage={currentPage}
+        marginPagesDisplayed={0}
+        pageCount={pagesCount}
+        previousLabel="<"
+        renderOnZeroPageCount={null}
+        containerClassName="pagination-container"
+        pageClassName="items"
+        pageLinkClassName="links"
+        activeClassName="active-item"
+        activeLinkClassName="active-link"
+        previousClassName="items"
+        previousLinkClassName="arrowButton"
+        nextClassName="items"
+        nextLinkClassName="arrowButton"
+        disabledClassName="disabled-item"
+        disabledLinkClassName="disabled-link"
+      />
+    </Flex>
+  );
+
   const renderVacancies = () => (
     <Container size="1116px" px={0} pt={40}>
       <Flex gap={28} className={classes.root}>
         {renderFilters()}
         <Flex direction="column" className={classes.mainDataContainer}>
           {renderSearch()}
-          {renderVacanciesContainer()}
+          {isRequestFullfiled && vacancies.length !== 0 && (
+            <>
+              {renderVacanciesContainer()}
+              {renderPagination()}
+            </>
+          )}
         </Flex>
       </Flex>
     </Container>
@@ -140,7 +182,7 @@ export default function HomePageComponent(props: Props) {
   return (
     <section className={classes.mainSection}>
       {renderLoader()}
-      {isRequestFullfiled && vacancies.length !== 0 && renderVacancies()}
+      {renderVacancies()}
     </section>
   );
 }
