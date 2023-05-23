@@ -13,6 +13,7 @@ import SearchInput from '../../components/SearchInput/SearchInput.container';
 import VacanciesContainer from '../../components/VacanciesContainer/VacanciesContainer.container';
 import { Catalogue, VacancyResponse } from '../../types/apiTypes';
 import '../../styles/react-paginate.scss';
+import { HEADER_HEIGHT } from '../../app.config';
 
 interface Props {
   vacancies: VacancyResponse[];
@@ -40,7 +41,7 @@ interface Props {
 const useStyles = createStyles((theme) => ({
   mainSection: {
     width: '100%',
-    minHeight: 'calc(100vh - 84px)',
+    minHeight: `calc(100vh - ${HEADER_HEIGHT})`,
   },
 
   root: {
@@ -48,7 +49,7 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
 
     [theme.fn.smallerThan('lg')]: {
-      padding: '0 15px',
+      padding: '0 15px 20px 15px',
     },
 
     [theme.fn.smallerThan('md')]: {
@@ -66,7 +67,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   loaderOverlay: {
-    minHeight: 'calc(100vh - 84px)',
+    minHeight: `calc(100vh - ${HEADER_HEIGHT})`,
     marginTop: '84px',
   },
 

@@ -26,7 +26,6 @@ const useStyles = createStyles((theme) => ({
     padding: '24px 60px 24px 24px',
     width: '100%',
     minHeight: rem(137),
-    height: 'auto',
     background: '#FFFFFF',
     border: '1px solid #EAEBED',
     borderRadius: '12px',

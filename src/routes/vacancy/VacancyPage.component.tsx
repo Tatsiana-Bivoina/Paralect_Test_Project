@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { VacanciesResponseType, VacancyResponse } from '../../types/apiTypes';
 import VacanciesContainer from '../../components/VacanciesContainer/VacanciesContainer.container';
+import { HEADER_HEIGHT } from '../../app.config';
 
 interface Props {
   vacancy: VacanciesResponseType;
@@ -21,7 +22,7 @@ interface Props {
 const useStyles = createStyles((theme) => ({
   mainSection: {
     width: '100%',
-    minHeight: 'calc(100vh - 84px)',
+    minHeight: `calc(100vh - ${HEADER_HEIGHT})`,
   },
 
   root: {
@@ -30,13 +31,13 @@ const useStyles = createStyles((theme) => ({
     gap: rem(20),
 
     [theme.fn.smallerThan('lg')]: {
-      padding: '0 15px',
+      padding: '0 15px 20px 15px',
     },
   },
 
   loaderOverlay: {
-    minHeight: 'calc(100vh - 84px)',
-    marginTop: '84px',
+    minHeight: `calc(100vh - ${HEADER_HEIGHT})`,
+    marginTop: `${HEADER_HEIGHT}`,
   },
 
   vacancyDescriptionBlock: {
