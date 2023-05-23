@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Paralect_Test_Project/static/css/main.02b1635d.css",
-    "main.js": "/Paralect_Test_Project/static/js/main.94b579f1.js",
+    "main.js": "/Paralect_Test_Project/static/js/main.50b48a96.js",
     "static/media/man-image.svg": "/Paralect_Test_Project/static/media/man-image.e971983585ef9132b066d5ec6b8321e4.svg",
     "index.html": "/Paralect_Test_Project/index.html",
     "static/media/location-icon.svg": "/Paralect_Test_Project/static/media/location-icon.e773c0de5c7b766b78fb0781f1bb8d5d.svg",
@@ -15,10 +15,10 @@
     "static/media/arrow-up.svg": "/Paralect_Test_Project/static/media/arrow-up.0f55f4577374f807205a5ebf6e7e451d.svg",
     "static/media/arrow-down-icon.svg": "/Paralect_Test_Project/static/media/arrow-down-icon.0a65a3fce9c6155adeb8289271261026.svg",
     "main.02b1635d.css.map": "/Paralect_Test_Project/static/css/main.02b1635d.css.map",
-    "main.94b579f1.js.map": "/Paralect_Test_Project/static/js/main.94b579f1.js.map"
+    "main.50b48a96.js.map": "/Paralect_Test_Project/static/js/main.50b48a96.js.map"
   },
   "entrypoints": [
     "static/css/main.02b1635d.css",
-    "static/js/main.94b579f1.js"
+    "static/js/main.50b48a96.js"
   ]
 }
