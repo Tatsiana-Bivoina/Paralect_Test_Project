@@ -55,7 +55,7 @@ export default function SearchInputComponent(props: Props) {
       )}
       placeholder="Введите название вакансии"
       rightSectionWidth={83}
-      styles={(theme) => ({
+      styles={() => ({
         input: {
           display: 'flex',
           alignItems: 'center',

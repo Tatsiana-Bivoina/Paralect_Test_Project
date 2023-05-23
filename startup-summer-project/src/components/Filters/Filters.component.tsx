@@ -295,7 +295,7 @@ export default function FiltersComponent(props: Props) {
         rightIcon={<ArrowDown />}
         variant="transparent"
         onClick={() => paymentToHandler.current?.decrement()}
-        styles={(theme) => ({
+        styles={() => ({
           rightIcon: {
             width: '12px',
             height: '12px',

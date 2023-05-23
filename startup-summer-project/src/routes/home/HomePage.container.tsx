@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from 'react-router';
 import { useDisclosure } from '@mantine/hooks';
 import HomePageComponent from './HomePage.component';
 import { auth, getCatalogues, getVacancies } from '../../service/homePageService';
-import { Catalogue, VacanciesRequest, VacancyResponse } from '../../types/apiTypes';
+import {
+  Catalogue,
+  VacanciesRequest,
+  VacancyResponse,
+} from '../../types/apiTypes';
 import { ITEMS_PER_PAGE } from '../../app.config';
 
 function HomePageContainer() {
@@ -11,12 +15,13 @@ function HomePageContainer() {
   const [accessToken, setAccessToken] = useState<string>(localStorage.getItem('accessToken') ?? '');
   const [catalogues, setCatalogues] = useState<Catalogue[]>([]);
   const [selectValue, setSelectValue] = useState<string | null>(localStorage.getItem('industry') ?? '');
-  const [paymentFrom, setPaymentFrom] = useState<number | ''>(Number(localStorage.getItem('paymentFrom')) ?? '');
-  const [paymentTo, setPaymentTo] = useState<number | ''>(Number(localStorage.getItem('paymentTo')) ?? '');
+  const [paymentFrom, setPaymentFrom] = useState<number | ''>(localStorage.getItem('paymentFrom') ? Number(localStorage.getItem('paymentFrom')) : '');
+  const [paymentTo, setPaymentTo] = useState<number | ''>(localStorage.getItem('paymentTo') ? Number(localStorage.getItem('paymentTo')) : '');
   const [searchInputValue, setSearchInputValue] = useState<string>(localStorage.getItem('search') ?? '');
   const [isRequestFullfiled, setIsRequestFullfiled] = useState<boolean>(false);
   const [pagesCount, setPagesCount] = useState<number>(Number(localStorage.getItem('totalVacanciesCount')) ?? 0);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [homePageError, setHomePageError] = useState<string>('');
   const [visible, { open, close }] = useDisclosure(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,14 +56,18 @@ function HomePageContainer() {
     changeVacansiesState(await getVacancies(request));
   };
 
-  const getCataloguesArr = (): number => {
-    const value = localStorage.getItem('industry') ?? selectValue;
-    const catalogue = catalogues.filter((el) => el.value === value);
-    let key = 33;
-    if (catalogue.length !== 0) {
-      key = catalogue[0].key;
+  const getCataloguesArr = (): number[] => {
+    const value = localStorage.getItem('industry');
+    const key = [];
+    if (value) {
+      const catalogue = catalogues.filter((el) => el.value === value);
+
+      if (catalogue.length !== 0) {
+        key.push(catalogue[0].key);
+        return key;
+      }
     }
-    return key;
+    return catalogues.map((el) => el.key);
   };
 
   const changeTotalPagesCount = () => {
@@ -66,6 +75,12 @@ function HomePageContainer() {
     if (count) {
       const pages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
       setPagesCount(pages <= 125 ? pages : 125);
+    }
+  };
+
+  const clearHomePageError = () => {
+    if (homePageError !== '') {
+      setHomePageError('');
     }
   };
 
@@ -78,6 +93,8 @@ function HomePageContainer() {
       payment_to: paymentTo,
     };
     open();
+    setIsRequestFullfiled(false);
+    clearHomePageError();
     getAllVacancies(defaultRequest)
       .then(() => {
         changeTotalPagesCount();
@@ -86,7 +103,7 @@ function HomePageContainer() {
       })
       .catch((error) => {
         if (error instanceof Error) {
-          console.log(error.message);
+          setHomePageError(error.message);
         }
       });
   };
@@ -99,11 +116,15 @@ function HomePageContainer() {
         setAccessToken(response.access_token);
       }
     };
+    clearHomePageError();
     if (accessToken === '') {
       login()
+        .then(() => {
+          getVacanciesHandle(0);
+        })
         .catch((error) => {
           if (error instanceof Error) {
-            console.log(error.message);
+            setHomePageError(error.message);
           }
         });
     }
@@ -116,10 +137,12 @@ function HomePageContainer() {
         setCatalogues(response);
       }
     };
+    clearHomePageError();
+    setIsRequestFullfiled(false);
     getAllCatalogues()
       .catch((error) => {
         if (error instanceof Error) {
-          console.log(error.message);
+          setHomePageError(error.message);
         }
       });
   }, []);
@@ -131,10 +154,10 @@ function HomePageContainer() {
   }, []);
 
   useEffect(() => {
-    if (accessToken !== '') {
+    if (catalogues.length !== 0) {
       getVacanciesHandle(0);
     }
-  }, [accessToken]);
+  }, [catalogues]);
 
   const handleResetButtonClick = () => {
     setSelectValue('');

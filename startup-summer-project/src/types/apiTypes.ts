@@ -53,6 +53,7 @@ export interface VacanciesResponseType {
   moveable: boolean;
   agreement: boolean;
   anonymous: boolean;
+  vacancyRichText: string;
   type_of_work: {
     id: number;
     title: string;
@@ -136,5 +137,5 @@ export interface VacanciesRequest {
   keyword: string;
   payment_from: number | '';
   payment_to: number | '';
-  catalogues: number;
+  catalogues: number[];
 }

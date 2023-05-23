@@ -15,6 +15,7 @@
     "@types/react-dom": "^18.2.4",
     "@types/react-paginate": "^7.1.1",
     "axios": "^1.4.0",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-paginate": "^8.2.0",
@@ -30,8 +31,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext=ts --ext=tsx ."
+    "lint": "eslint --ext=ts --ext=tsx .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
+  "homepage": "https://github.com/Tatsiana-Bivoina/Paralect_Test_Project",
   "eslintConfig": {
     "extends": [
       "react-app",

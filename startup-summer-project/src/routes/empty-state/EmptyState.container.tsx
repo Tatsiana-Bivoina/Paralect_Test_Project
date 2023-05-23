@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import EmptyStateComponent from './EmptyState.component';
 
@@ -8,6 +8,7 @@ function EmptyStateContainer() {
 
   const handleRedirectButtonClick = () => {
     if (location.state === '/') {
+      localStorage.setItem('search', '');
       localStorage.setItem('industry', '');
       localStorage.setItem('paymentFrom', '');
       localStorage.setItem('paymentTo', '');

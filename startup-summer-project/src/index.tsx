@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import Layout from './components/Layout/Layout.component';
 import HomePage from './routes/home/HomePage.container';
@@ -16,7 +16,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
@@ -25,7 +25,7 @@ root.render(
             <Route path="empty-state" element={<EmptyStatePage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </MantineProvider>
   </React.StrictMode>,
 );

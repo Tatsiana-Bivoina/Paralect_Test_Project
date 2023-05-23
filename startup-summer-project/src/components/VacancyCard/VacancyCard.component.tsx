@@ -15,20 +15,26 @@ import { VacancyResponse } from '../../types/apiTypes';
 
 interface Props {
   vacancy: VacancyResponse;
-  toggleFavoriteVacancy: () => void;
+  isVacancyPage: boolean;
+  toggleFavoriteVacancy: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleCardClick: () => void;
 }
 
 const useStyles = createStyles((theme) => ({
   root: {
     position: 'relative',
     padding: '24px 60px 24px 24px',
-    gap: rem(12.5),
     width: '100%',
     minHeight: rem(137),
     height: 'auto',
     background: '#FFFFFF',
     border: '1px solid #EAEBED',
     borderRadius: '12px',
+
+    '&:hover': {
+      cursor: 'pointer',
+      border: '1px solid #b0b2b6',
+    },
 
     [theme.fn.smallerThan('sm')]: {
       height: 'auto',
@@ -41,6 +47,19 @@ const useStyles = createStyles((theme) => ({
     fontSize: '20px',
     lineHeight: '24px',
     color: '#5E96FC',
+    textOverflow: 'ellipsis',
+
+    [theme.fn.smallerThan('xs')]: {
+      fontSize: '18px',
+    },
+  },
+
+  vacancyPageProfession: {
+    fontFamily: 'Inter',
+    fontWeight: 700,
+    fontSize: '28px',
+    lineHeight: '34px',
+    color: '#232134',
     textOverflow: 'ellipsis',
 
     [theme.fn.smallerThan('xs')]: {
@@ -63,6 +82,14 @@ const useStyles = createStyles((theme) => ({
     color: '#232134',
   },
 
+  vacancyPageSalary: {
+    fontFamily: 'Inter',
+    fontWeight: 700,
+    fontSize: '20px',
+    lineHeight: '20px',
+    color: '#232134',
+  },
+
   dotIcon: {
     [theme.fn.smallerThan('sm')]: {
       display: 'none',
@@ -77,6 +104,19 @@ const useStyles = createStyles((theme) => ({
     color: '#232134',
   },
 
+  vacancyPageTypeOfWork: {
+    fontFamily: 'Inter',
+    fontWeight: 400,
+    fontSize: '20px',
+    lineHeight: '20px',
+    color: '#232134',
+  },
+
+  locationIcon: {
+    width: '20px',
+    height: '20px',
+  },
+
   location: {
     fontFamily: 'Inter',
     fontWeight: 400,
@@ -89,7 +129,9 @@ const useStyles = createStyles((theme) => ({
 export default function VacancyCardComponent(props: Props) {
   const {
     vacancy,
+    isVacancyPage,
     toggleFavoriteVacancy,
+    handleCardClick,
   } = props;
 
   const { classes } = useStyles();
@@ -99,7 +141,7 @@ export default function VacancyCardComponent(props: Props) {
       data-elem={`vacancy-${vacancy.id}-shortlist-button`}
       rightIcon={vacancy.isFavorite ? <PaintedStarIcon /> : <StarIcon />}
       variant="subtle"
-      onClick={() => toggleFavoriteVacancy()}
+      onClick={(event) => toggleFavoriteVacancy(event)}
       styles={() => ({
         root: {
           border: 0,
@@ -127,7 +169,7 @@ export default function VacancyCardComponent(props: Props) {
   const renderSalary = () => (
     <>
       {(vacancy.payment_from !== 0 && vacancy.payment_to === 0) && (
-        <Text className={classes.salary}>
+        <Text className={isVacancyPage ? classes.vacancyPageSalary : classes.salary}>
           з/п от
           &nbsp;
           {vacancy.payment_from}
@@ -136,7 +178,7 @@ export default function VacancyCardComponent(props: Props) {
         </Text>
       )}
       {(vacancy.payment_from === 0 && vacancy.payment_to !== 0) && (
-        <Text className={classes.salary}>
+        <Text className={isVacancyPage ? classes.vacancyPageSalary : classes.salary}>
           з/п до
           &nbsp;
           {vacancy.payment_to}
@@ -145,7 +187,7 @@ export default function VacancyCardComponent(props: Props) {
         </Text>
       )}
       {(vacancy.payment_from !== 0 && vacancy.payment_to !== 0) && (
-        <Text className={classes.salary}>
+        <Text className={isVacancyPage ? classes.vacancyPageSalary : classes.salary}>
           з/п от
           &nbsp;
           {vacancy.payment_from}
@@ -158,7 +200,7 @@ export default function VacancyCardComponent(props: Props) {
         </Text>
       )}
       {(vacancy.payment_from === 0 && vacancy.payment_to === 0) && (
-        <Text className={classes.salary}>
+        <Text className={isVacancyPage ? classes.vacancyPageSalary : classes.salary}>
           з/п по договоренности
         </Text>
       )}
@@ -169,9 +211,16 @@ export default function VacancyCardComponent(props: Props) {
     <Flex
       direction="column"
       className={classes.root}
+      gap={isVacancyPage ? 16 : 12.5}
       data-elem={`vacancy-${vacancy.id}`}
+      onClick={() => handleCardClick()}
     >
-      <Title order={2} className={classes.profession}>{vacancy.profession}</Title>
+      <Title
+        order={2}
+        className={isVacancyPage ? classes.vacancyPageProfession : classes.profession}
+      >
+        {vacancy.profession}
+      </Title>
       <Flex
         gap={12}
         align="center"
@@ -179,12 +228,12 @@ export default function VacancyCardComponent(props: Props) {
       >
         {renderSalary()}
         <DotIcon className={classes.dotIcon} />
-        <Text className={classes.typeOfWork}>
+        <Text className={isVacancyPage ? classes.vacancyPageTypeOfWork : classes.typeOfWork}>
           {vacancy.type_of_work_title}
         </Text>
       </Flex>
       <Flex gap={11}>
-        <LocationIcon />
+        <LocationIcon className={classes.locationIcon} />
         <Text className={classes.location}>
           {vacancy.town_title}
         </Text>

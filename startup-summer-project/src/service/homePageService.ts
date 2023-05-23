@@ -89,3 +89,12 @@ export async function getCatalogues(): Promise<Catalogue[]> {
     }
   ));
 }
+
+export async function getVacancy(id: number): Promise<VacanciesResponseType> {
+  const response = await $api.get<VacanciesResponseType>(`/2.0/vacancies/${id}`);
+  if (response.status !== 200) {
+    throw new Error('Данных нет');
+  }
+
+  return response.data;
+}

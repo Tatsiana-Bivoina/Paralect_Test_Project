@@ -168,7 +168,7 @@ export default function HomePageComponent(props: Props) {
         {renderFilters()}
         <Flex direction="column" className={classes.mainDataContainer}>
           {renderSearch()}
-          {isRequestFullfiled && vacancies.length !== 0 && (
+          {isRequestFullfiled && vacancies && vacancies.length !== 0 && (
             <>
               {renderVacanciesContainer()}
               {renderPagination()}
