@@ -78,7 +78,11 @@ const useStyles = createStyles((theme) => ({
     lineHeight: '20px',
     color: '#232134',
 
-    '&:hover, &.active': {
+    '&:hover': {
+      color: '#5E96FC',
+    },
+
+    '&.active': {
       fontWeight: 500,
       color: '#5E96FC',
     },

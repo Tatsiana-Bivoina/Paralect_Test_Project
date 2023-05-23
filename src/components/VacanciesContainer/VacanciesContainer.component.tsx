@@ -28,7 +28,7 @@ export default function VacanciesContainerComponent(props: Props) {
   );
 
   return (
-    <Flex direction="column" gap={16}>
+    <Flex direction="column" gap={14}>
       {renderVacanciesCards()}
     </Flex>
   );

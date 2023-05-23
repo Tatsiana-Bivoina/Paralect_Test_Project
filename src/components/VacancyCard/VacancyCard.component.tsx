@@ -161,6 +161,12 @@ export default function VacancyCardComponent(props: Props) {
         },
         icon: {
           marginLeft: '0 !important',
+          stroke: '#ACADB9',
+          strokeWidth: 1.5,
+
+          '&:hover': {
+            strokeWidth: 2.5,
+          },
         },
       })}
     />

@@ -135,6 +135,10 @@ export default function FiltersComponent(props: Props) {
             color: '#ACADB9',
             paddingLeft: 0,
             paddingRight: 0,
+
+            '&:hover': {
+              backgroundColor: 'transparent',
+            },
           },
 
           rightIcon: {

@@ -56,7 +56,7 @@ export default function EmptyStateComponent(props: Props) {
           borderRadius: '8px',
           backgroundColor: '#DEECFF',
           '&:hover': {
-            backgroundColor: 'transparent',
+            backgroundColor: '#95bef5',
           },
         },
         label: {
