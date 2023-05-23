@@ -22,17 +22,21 @@ export async function auth(): Promise<LoginResponse> {
   if (!(baseUrl && secretKey && xSecretKey && login && password && userId)) {
     throw new Error('Извините, что-то пошло не так...');
   }
-  const response = await axios.get<LoginResponse>(`${baseUrl}/2.0/oauth2/password?login=${login}&password=${password}&client_id=${userId}&client_secret=${secretKey}&hr=0`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'x-secret-key': xSecretKey,
-      'X-Api-App-Id': secretKey,
-    },
-  });
-  if (response.status !== 200) {
-    throw new Error('Данных нет');
+  try {
+    const response = await axios.get<LoginResponse>(`${baseUrl}/2.0/oauth2/password?login=${login}&password=${password}&client_id=${userId}&client_secret=${secretKey}&hr=0`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-secret-key': xSecretKey,
+        'X-Api-App-Id': secretKey,
+      },
+    });
+    if (response.status !== 200) {
+      throw new Error('Извините, что-то пошло не так...');
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error('Пользователь не авторизован');
   }
-  return response.data;
 }
 
 export async function getVacancies(request: VacanciesRequest): Promise<VacancyResponse[]> {
@@ -40,61 +44,76 @@ export async function getVacancies(request: VacanciesRequest): Promise<VacancyRe
     throw new Error('Извините, что-то пошло не так...');
   }
 
-  const response = await axios.get<VacanciesResponse>(`${baseUrl}/2.0/vacancies/?
-  published=${PUBLISHED}&
-  count=${ITEMS_PER_PAGE}&
-  page=${request.currentPage}&
-  keyword=${request.keyword}&
-  payment_from=${request.payment_from}&
-  payment_to=${request.payment_to}&
-  catalogues=${request.catalogues}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-      'Content-Type': 'application/json',
-      'x-secret-key': xSecretKey,
-      'X-Api-App-Id': secretKey,
-    },
-  });
-  if (response.status !== 200) {
-    throw new Error('Данных нет');
-  }
-  localStorage.setItem('totalVacanciesCount', response.data.total.toString());
+  try {
+    const response = await axios.get<VacanciesResponse>(`${baseUrl}/2.0/vacancies/?
+    published=${PUBLISHED}&
+    count=${ITEMS_PER_PAGE}&
+    page=${request.currentPage}&
+    keyword=${request.keyword}&
+    payment_from=${request.payment_from}&
+    payment_to=${request.payment_to}&
+    catalogues=${JSON.stringify(request.catalogues)}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+        'Content-Type': 'application/json',
+        'x-secret-key': xSecretKey,
+        'X-Api-App-Id': secretKey,
+      },
+    });
 
-  return response.data.objects.map((el: VacanciesResponseType) => (
-    {
-      id: el.id,
-      profession: el.profession,
-      firm_name: el.firm_name,
-      town_title: el.town.title,
-      type_of_work_title: el.type_of_work.title,
-      payment_to: el.payment_to,
-      payment_from: el.payment_from,
-      currency: el.currency,
-      isFavorite: false,
+    if (response.status !== 200) {
+      throw new Error('Упс, что-то пошло не так...');
     }
-  ));
+
+    localStorage.setItem('totalVacanciesCount', response.data.total.toString());
+
+    return response.data.objects.map((el: VacanciesResponseType) => (
+      {
+        id: el.id,
+        profession: el.profession,
+        firm_name: el.firm_name,
+        town_title: el.town.title,
+        type_of_work_title: el.type_of_work.title,
+        payment_to: el.payment_to,
+        payment_from: el.payment_from,
+        currency: el.currency,
+        isFavorite: false,
+      }
+    ));
+  } catch (error) {
+    throw new Error('Извините, вакансии не найдены');
+  }
 }
 
 export async function getCatalogues(): Promise<Catalogue[]> {
-  const response = await $api.get<CatalogueResponse[]>('/2.0/catalogues/');
-  if (response.status !== 200) {
-    throw new Error('Данных нет');
-  }
+  try {
+    const response = await $api.get<CatalogueResponse[]>('/2.0/catalogues/');
 
-  return response.data.map((el: CatalogueResponse) => (
-    {
-      value: el.title,
-      label: el.title,
-      key: el.key,
+    if (response.status !== 200) {
+      throw new Error('Упс, что-то пошло не так...');
     }
-  ));
+
+    return response.data.map((el: CatalogueResponse) => (
+      {
+        value: el.title,
+        label: el.title,
+        key: el.key,
+      }
+    ));
+  } catch (error) {
+    throw new Error('Список отраслей не найден');
+  }
 }
 
 export async function getVacancy(id: number): Promise<VacanciesResponseType> {
-  const response = await $api.get<VacanciesResponseType>(`/2.0/vacancies/${id}`);
-  if (response.status !== 200) {
-    throw new Error('Данных нет');
-  }
+  try {
+    const response = await $api.get<VacanciesResponseType>(`/2.0/vacancies/${id}`);
+    if (response.status !== 200) {
+      throw new Error('Упс, что-то пошло не так...');
+    }
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw new Error('Вакансия не найдена');
+  }
 }

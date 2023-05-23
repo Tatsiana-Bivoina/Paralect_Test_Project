@@ -18,7 +18,6 @@ function HomePageContainer() {
   const [paymentFrom, setPaymentFrom] = useState<number | ''>(localStorage.getItem('paymentFrom') ? Number(localStorage.getItem('paymentFrom')) : '');
   const [paymentTo, setPaymentTo] = useState<number | ''>(localStorage.getItem('paymentTo') ? Number(localStorage.getItem('paymentTo')) : '');
   const [searchInputValue, setSearchInputValue] = useState<string>(localStorage.getItem('search') ?? '');
-  const [isRequestFullfiled, setIsRequestFullfiled] = useState<boolean>(false);
   const [pagesCount, setPagesCount] = useState<number>(Number(localStorage.getItem('totalVacanciesCount')) ?? 0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [homePageError, setHomePageError] = useState<string>('');
@@ -93,12 +92,10 @@ function HomePageContainer() {
       payment_to: paymentTo,
     };
     open();
-    setIsRequestFullfiled(false);
     clearHomePageError();
     getAllVacancies(defaultRequest)
       .then(() => {
         changeTotalPagesCount();
-        setIsRequestFullfiled(true);
         close();
       })
       .catch((error) => {
@@ -138,7 +135,6 @@ function HomePageContainer() {
       }
     };
     clearHomePageError();
-    setIsRequestFullfiled(false);
     getAllCatalogues()
       .catch((error) => {
         if (error instanceof Error) {
@@ -152,6 +148,12 @@ function HomePageContainer() {
       localStorage.setItem('favoriteVacancies', JSON.stringify([]));
     }
   }, []);
+
+  useEffect(() => {
+    if (homePageError !== '') {
+      close();
+    }
+  }, [homePageError]);
 
   useEffect(() => {
     if (catalogues.length !== 0) {
@@ -217,9 +219,9 @@ function HomePageContainer() {
       paymentTo={paymentTo}
       searchInputValue={searchInputValue}
       visible={visible}
-      isRequestFullfiled={isRequestFullfiled}
       pagesCount={pagesCount}
       currentPage={currentPage}
+      homePageError={homePageError}
       toggleFavoriteVacancyInVacancies={toggleFavoriteVacancyInVacancies}
       handleIndustrySelectChange={handleIndustrySelectChange}
       handlePaymentFromChange={handlePaymentFromChange}

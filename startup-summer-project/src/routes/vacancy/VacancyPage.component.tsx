@@ -3,6 +3,7 @@ import {
   Container,
   Flex,
   LoadingOverlay,
+  Title,
   createStyles,
   rem,
 } from '@mantine/core';
@@ -66,6 +67,22 @@ const useStyles = createStyles((theme) => ({
       color: '#232134',
     },
   },
+
+  errorContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: rem(60),
+  },
+
+  errorMessage: {
+    fontFamily: 'Inter',
+    fontWeight: 600,
+    fontSize: '24px',
+    lineHeight: '19px',
+    color: '#e71414',
+    textAlign: 'center',
+  },
 }));
 
 export default function VacancyPageComponent(props: Props) {
@@ -108,10 +125,17 @@ export default function VacancyPageComponent(props: Props) {
     </Container>
   );
 
+  const renderError = () => (
+    <Flex className={classes.errorContainer}>
+      <Title order={2} className={classes.errorMessage}>{vacancyError}</Title>
+    </Flex>
+  );
+
   return (
     <section className={classes.mainSection}>
       {renderLoader()}
-      {!visible && renderVacancy()}
+      {vacancyError !== '' && renderError()}
+      {vacancyError === '' && !visible && renderVacancy()}
     </section>
   );
 }

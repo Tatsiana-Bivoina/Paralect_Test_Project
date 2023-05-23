@@ -98,6 +98,12 @@ function VacancyPageContainer() {
     }
   }, []);
 
+  useEffect(() => {
+    if (vacancyError !== '') {
+      close();
+    }
+  }, [vacancyError]);
+
   const checkIsVacancyFavorite = (elem: VacanciesResponseType): boolean => {
     const favoriteVacancies = localStorage.getItem('favoriteVacancies');
 

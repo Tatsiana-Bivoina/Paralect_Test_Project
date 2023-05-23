@@ -3,7 +3,9 @@ import {
   Container,
   Flex,
   LoadingOverlay,
+  Title,
   createStyles,
+  rem,
 } from '@mantine/core';
 import ReactPaginate from 'react-paginate';
 import Filters from '../../components/Filters/Filters.container';
@@ -20,9 +22,9 @@ interface Props {
   paymentTo: number | '';
   searchInputValue: string;
   visible: boolean;
-  isRequestFullfiled: boolean;
   pagesCount: number;
   currentPage: number;
+  homePageError: string;
   toggleFavoriteVacancyInVacancies: (arr: VacancyResponse[]) => void;
   handleIndustrySelectChange: (val: string | null) => void;
   handlePaymentFromChange: (val: number | '') => void;
@@ -67,6 +69,22 @@ const useStyles = createStyles((theme) => ({
     minHeight: 'calc(100vh - 84px)',
     marginTop: '84px',
   },
+
+  errorContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: rem(60),
+  },
+
+  errorMessage: {
+    fontFamily: 'Inter',
+    fontWeight: 600,
+    fontSize: '24px',
+    lineHeight: '19px',
+    color: '#e71414',
+    textAlign: 'center',
+  },
 }));
 
 export default function HomePageComponent(props: Props) {
@@ -78,9 +96,9 @@ export default function HomePageComponent(props: Props) {
     paymentTo,
     searchInputValue,
     visible,
-    isRequestFullfiled,
     pagesCount,
     currentPage,
+    homePageError,
     toggleFavoriteVacancyInVacancies,
     handleIndustrySelectChange,
     handlePaymentFromChange,
@@ -162,13 +180,20 @@ export default function HomePageComponent(props: Props) {
     </Flex>
   );
 
+  const renderError = () => (
+    <Flex className={classes.errorContainer}>
+      <Title order={2} className={classes.errorMessage}>{homePageError}</Title>
+    </Flex>
+  );
+
   const renderVacancies = () => (
     <Container size="1116px" px={0} pt={40}>
       <Flex gap={28} className={classes.root}>
         {renderFilters()}
         <Flex direction="column" className={classes.mainDataContainer}>
           {renderSearch()}
-          {isRequestFullfiled && vacancies && vacancies.length !== 0 && (
+          {homePageError !== '' && renderError()}
+          {homePageError === '' && vacancies && vacancies.length !== 0 && (
             <>
               {renderVacanciesContainer()}
               {renderPagination()}
