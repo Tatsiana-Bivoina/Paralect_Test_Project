@@ -75,13 +75,14 @@ const defaultVacancy: VacanciesResponseType = {
 
 function VacancyPageContainer() {
   const [vacancy, setVacancy] = useState<VacanciesResponseType>(defaultVacancy);
+  const [accessToken] = useState<string>(localStorage.getItem('accessToken') ?? '');
   const [currentVacancy, setCurrentVacancy] = useState<VacancyResponse[]>([]);
   const [vacancyError, setVacancyError] = useState<string>('');
   const [visible, { close }] = useDisclosure(true);
   const { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (accessToken !== '' && id) {
       const getCurrentVacancy = async () => {
         const res = await getVacancy(Number(id.replace(':', '')));
         setVacancy(res);
@@ -96,7 +97,7 @@ function VacancyPageContainer() {
           }
         });
     }
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     if (vacancyError !== '') {

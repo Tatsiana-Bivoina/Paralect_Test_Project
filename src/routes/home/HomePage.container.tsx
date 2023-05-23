@@ -116,9 +116,6 @@ function HomePageContainer() {
     clearHomePageError();
     if (accessToken === '') {
       login()
-        .then(() => {
-          getVacanciesHandle(0);
-        })
         .catch((error) => {
           if (error instanceof Error) {
             setHomePageError(error.message);
@@ -128,38 +125,40 @@ function HomePageContainer() {
   }, []);
 
   useEffect(() => {
-    const getAllCatalogues = async () => {
-      const response = await getCatalogues();
-      if (response) {
-        setCatalogues(response);
-      }
-    };
-    clearHomePageError();
-    getAllCatalogues()
-      .catch((error) => {
-        if (error instanceof Error) {
-          setHomePageError(error.message);
-        }
-      });
-  }, []);
-
-  useEffect(() => {
     if (!localStorage.getItem('favoriteVacancies')) {
       localStorage.setItem('favoriteVacancies', JSON.stringify([]));
     }
   }, []);
 
   useEffect(() => {
-    if (homePageError !== '') {
-      close();
+    if (accessToken !== '') {
+      const getAllCatalogues = async () => {
+        const response = await getCatalogues();
+        if (response) {
+          setCatalogues(response);
+        }
+      };
+      clearHomePageError();
+      getAllCatalogues()
+        .catch((error) => {
+          if (error instanceof Error) {
+            setHomePageError(error.message);
+          }
+        });
     }
-  }, [homePageError]);
+  }, [accessToken]);
 
   useEffect(() => {
     if (catalogues.length !== 0) {
       getVacanciesHandle(0);
     }
   }, [catalogues]);
+
+  useEffect(() => {
+    if (homePageError !== '') {
+      close();
+    }
+  }, [homePageError]);
 
   const handleResetButtonClick = () => {
     setSelectValue('');

@@ -35,7 +35,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://github.com/Tatsiana-Bivoina/Paralect_Test_Project",
+  "homepage": "https://tatsiana-bivoina.github.io/Paralect_Test_Project/",
   "eslintConfig": {
     "extends": [
       "react-app",

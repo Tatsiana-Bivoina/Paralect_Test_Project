@@ -45,21 +45,14 @@ export async function getVacancies(request: VacanciesRequest): Promise<VacancyRe
   }
 
   try {
-    const response = await axios.get<VacanciesResponse>(`${baseUrl}/2.0/vacancies/?
+    const response = await $api.get<VacanciesResponse>(`/2.0/vacancies/?
     published=${PUBLISHED}&
     count=${ITEMS_PER_PAGE}&
     page=${request.currentPage}&
     keyword=${request.keyword}&
     payment_from=${request.payment_from}&
     payment_to=${request.payment_to}&
-    catalogues=${JSON.stringify(request.catalogues)}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-        'Content-Type': 'application/json',
-        'x-secret-key': xSecretKey,
-        'X-Api-App-Id': secretKey,
-      },
-    });
+    catalogues=${request.catalogues.length === 1 ? request.catalogues.join('').toString() : JSON.stringify(request.catalogues)}`);
 
     if (response.status !== 200) {
       throw new Error('Упс, что-то пошло не так...');
